@@ -126,5 +126,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 GITHUB_CLIENT_ID = "Ov23li4EKDoc4UxuIKC1"
 GITHUB_CLIENT_SECRET = "a3f52145fc36b3a30d001d2b97704be9bccd6db3"
 ALLOWED_HOSTS = ['coihub-1.onrender.com', '127.0.0.1', 'localhost']
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
