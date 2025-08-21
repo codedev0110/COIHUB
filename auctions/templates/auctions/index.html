@@ -10,7 +10,7 @@
     }
     
     .project-card {
-        background: bluelinear-gradient(45deg, #f3f4f6, #e5e7eb);
+        background: linear-gradient(45deg, #f3f4f6, #e5e7eb);
         border-radius: 20px;
         padding: 25px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -201,6 +201,108 @@
         font-style: italic;
         font-size: 1.1rem;
     }
+
+    /* Filter section styles */
+    .filter-section {
+        background: linear-gradient(135deg, #667eea10, #764ba210);
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 30px;
+        border: 1px solid rgba(102, 126, 234, 0.2);
+        backdrop-filter: blur(10px);
+    }
+
+    .filter-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        color: #333;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .filter-header i {
+        color: #667eea;
+        font-size: 1.2rem;
+    }
+
+    .language-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .filter-btn {
+        padding: 10px 18px;
+        border-radius: 25px;
+        border: 2px solid #667eea30;
+        background: transparent;
+        color: #667eea;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .filter-btn:hover {
+        background: linear-gradient(45deg, #667eea20, #764ba220);
+        transform: translateY(-2px);
+        border-color: #667eea;
+    }
+
+    .filter-btn.active {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        border-color: #667eea;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .filter-btn.all-filter {
+        background: linear-gradient(45deg, #4facfe20, #00f2fe20);
+        border-color: #4facfe30;
+        color: #4facfe;
+    }
+
+    .filter-btn.all-filter:hover {
+        background: linear-gradient(45deg, #4facfe30, #00f2fe30);
+        border-color: #4facfe;
+    }
+
+    .filter-btn.all-filter.active {
+        background: linear-gradient(45deg, #4facfe, #00f2fe);
+        color: white;
+        border-color: #4facfe;
+    }
+
+    .clear-filters {
+        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+        color: white;
+        border-color: #ff6b6b;
+    }
+
+    .clear-filters:hover {
+        background: linear-gradient(45deg, #ff5252, #ff7575);
+        transform: translateY(-2px);
+    }
+
+    /* Hide/show animation for filtered projects */
+    .project-card.hidden {
+        display: none;
+    }
+
+    .project-card.fade-in {
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
     
     /* Responsive design */
     @media (max-width: 768px) {
@@ -221,20 +323,97 @@
             padding: 10px 12px;
             font-size: 0.85rem;
         }
+
+        .language-filters {
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 8px 15px;
+            font-size: 0.85rem;
+        }
+
+        .filter-section {
+            padding: 20px;
+        }
     }
 </style>
 
 <div class="projects-header">
-    <h2><i class="fas fa-folder-open"></i> All Projects</h2>
+    <h2><i class="fas fa-folder-open"></i> Bütün Proyektlər</h2>
     {% if projects %}
-        <p class="projects-count">{{ projects|length }} project{{ projects|length|pluralize }} found</p>
+        <p class="projects-count">
+            <span id="total-count">{{ projects|length }}</span> proyekt tapıldı
+        </p>
     {% endif %}
 </div>
 
+<!-- Language Filter Section -->
 {% if projects %}
-    <div class="projects-grid">
+<div class="filter-section">
+    <div class="filter-header">
+        <i class="fas fa-filter"></i>
+        Dil üzrə filterlə
+    </div>
+    <div class="language-filters">
+        <button class="filter-btn all-filter active" data-language="all">
+            <i class="fas fa-globe"></i>
+            Hamısı
+        </button>
+        
+        {% comment %} 
+        <!-- Backend-də bu şəkildə unique language-ləri göndərmək lazımdır -->
+        {% for language in unique_languages %}
+        <button class="filter-btn" data-language="{{ language.name }}">
+            <i class="fas fa-code"></i>
+            {{ language.name }}
+        </button>
+        {% endfor %}
+        {% endcomment %}
+        
+        <!-- Demo üçün statik dillər -->
+        <button class="filter-btn" data-language="Python">
+            <i class="fab fa-python"></i>
+            Python
+        </button>
+        <button class="filter-btn" data-language="JavaScript">
+            <i class="fab fa-js"></i>
+            JavaScript
+        </button>
+        <button class="filter-btn" data-language="Java">
+            <i class="fab fa-java"></i>
+            Java
+        </button>
+        <button class="filter-btn" data-language="C++">
+            <i class="fas fa-code"></i>
+            C++
+        </button>
+        <button class="filter-btn" data-language="HTML">
+            <i class="fab fa-html5"></i>
+            HTML
+        </button>
+        <button class="filter-btn" data-language="CSS">
+            <i class="fab fa-css3"></i>
+            CSS
+        </button>
+        <button class="filter-btn" data-language="React">
+            <i class="fab fa-react"></i>
+            React
+        </button>
+        
+        <button class="filter-btn clear-filters" id="clear-filters" style="display: none;">
+            <i class="fas fa-times"></i>
+            Təmizlə
+        </button>
+    </div>
+</div>
+{% endif %}
+
+{% if projects %}
+    <div class="projects-grid" id="projects-grid">
         {% for project in projects %}
-            <div class="project-card">
+            <div class="project-card" 
+                 data-languages="{% for language in project.languages.all %}{{ language.name }}{% if not forloop.last %},{% endif %}{% endfor %}">
                 <h2 class="project-title">
                     <i class="fas fa-code-branch"></i>
                     {{ project.title }}
@@ -250,23 +429,23 @@
                 <div class="project-languages">
                     <div class="languages-label">
                         <i class="fas fa-tags"></i>
-                        Languages:
+                        Dillər:
                     </div>
                     <div class="languages-tags">
                         {% for language in project.languages.all %}
                             <span class="language-tag">{{ language.name }}</span>
                         {% empty %}
-                            <span class="language-tag" style="color: #999;">No languages specified</span>
+                            <span class="language-tag" style="color: #999;">Dil göstərilməyib</span>
                         {% endfor %}
                     </div>
                 </div>
                 
                 <div class="project-actions">
                     <a href="{% url 'view_project' project_id=project.id %}" class="action-btn btn-primary-custom">
-                        <i class="fas fa-eye"></i> View
+                        <i class="fas fa-eye"></i> Bax
                     </a>
                     <a href="#" class="action-btn btn-outline-custom">
-                        <i class="fas fa-edit"></i> Edit
+                        <i class="fas fa-edit"></i> Redaktə et
                     </a>
                 </div>
             </div>
@@ -275,9 +454,119 @@
 {% else %}
     <div class="no-projects">
         <i class="fas fa-folder-open"></i>
-        <h3>No projects found</h3>
-        <p>Start creating your first project to see it here!</p>
+        <h3>Heç bir proyekt tapılmadı</h3>
+        <p>İlk proyektinizi yaradın ki, burada görünsün!</p>
     </div>
 {% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+    const totalCountElement = document.getElementById('total-count');
+    const clearFiltersBtn = document.getElementById('clear-filters');
+    let activeFilters = [];
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const language = this.getAttribute('data-language');
+            
+            // "Hamısı" düyməsi seçildikdə
+            if (language === 'all') {
+                // Bütün filterləri təmizlə
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                activeFilters = [];
+                clearFiltersBtn.style.display = 'none';
+                
+                // Bütün proyektləri göstər
+                projectCards.forEach(card => {
+                    card.classList.remove('hidden');
+                    card.classList.add('fade-in');
+                });
+                
+                updateProjectCount();
+                return;
+            }
+
+            // "Təmizlə" düyməsi seçildikdə
+            if (this.id === 'clear-filters') {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                document.querySelector('[data-language="all"]').classList.add('active');
+                activeFilters = [];
+                this.style.display = 'none';
+                
+                projectCards.forEach(card => {
+                    card.classList.remove('hidden');
+                    card.classList.add('fade-in');
+                });
+                
+                updateProjectCount();
+                return;
+            }
+
+            // Normal dil filteri
+            document.querySelector('[data-language="all"]').classList.remove('active');
+            
+            if (this.classList.contains('active')) {
+                // Filter aktiv idi, deaktiv et
+                this.classList.remove('active');
+                activeFilters = activeFilters.filter(lang => lang !== language);
+            } else {
+                // Filter deaktiv idi, aktiv et
+                this.classList.add('active');
+                if (!activeFilters.includes(language)) {
+                    activeFilters.push(language);
+                }
+            }
+
+            // Əgər heç bir filter seçilməyibsə, "Hamısı"nı aktiv et
+            if (activeFilters.length === 0) {
+                document.querySelector('[data-language="all"]').classList.add('active');
+                clearFiltersBtn.style.display = 'none';
+            } else {
+                clearFiltersBtn.style.display = 'flex';
+            }
+
+            // Proyektləri filterlə
+            filterProjects();
+            updateProjectCount();
+        });
+    });
+
+    function filterProjects() {
+        if (activeFilters.length === 0) {
+            // Heç bir filter yoxdursa, hamısını göstər
+            projectCards.forEach(card => {
+                card.classList.remove('hidden');
+                card.classList.add('fade-in');
+            });
+            return;
+        }
+
+        projectCards.forEach(card => {
+            const cardLanguages = card.getAttribute('data-languages').split(',').map(lang => lang.trim());
+            
+            // Seçilmiş filterlərdən ən azı biri proyektdə varsa göstər
+            const hasMatchingLanguage = activeFilters.some(filter => 
+                cardLanguages.some(cardLang => cardLang.toLowerCase().includes(filter.toLowerCase()))
+            );
+
+            if (hasMatchingLanguage) {
+                card.classList.remove('hidden');
+                card.classList.add('fade-in');
+            } else {
+                card.classList.add('hidden');
+                card.classList.remove('fade-in');
+            }
+        });
+    }
+
+    function updateProjectCount() {
+        const visibleProjects = document.querySelectorAll('.project-card:not(.hidden)').length;
+        totalCountElement.textContent = visibleProjects;
+    }
+});
+</script>
 
 {% endblock %}
