@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>COIHUB</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        body {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><rect width="1920" height="1080" fill="%23001122"/><circle cx="150" cy="150" r="2" fill="%23ffffff" opacity="0.8"/><circle cx="350" cy="100" r="1.5" fill="%23ffffff" opacity="0.6"/><circle cx="550" cy="200" r="1" fill="%23ffffff" opacity="0.9"/><circle cx="750" cy="80" r="2.5" fill="%23ffffff" opacity="0.7"/><circle cx="950" cy="300" r="1.5" fill="%23ffffff" opacity="0.8"/><circle cx="1150" cy="120" r="1" fill="%23ffffff" opacity="0.6"/><circle cx="1350" cy="250" r="2" fill="%23ffffff" opacity="0.9"/><circle cx="1550" cy="50" r="1.5" fill="%23ffffff" opacity="0.7"/><circle cx="1750" cy="180" r="1" fill="%23ffffff" opacity="0.8"/><circle cx="250" cy="400" r="1.5" fill="%23ffffff" opacity="0.6"/><circle cx="450" cy="350" r="2" fill="%23ffffff" opacity="0.8"/><circle cx="650" cy="450" r="1" fill="%23ffffff" opacity="0.9"/><circle cx="850" cy="380" r="1.5" fill="%23ffffff" opacity="0.7"/><circle cx="1050" cy="420" r="2.5" fill="%23ffffff" opacity="0.6"/><circle cx="1250" cy="480" r="1" fill="%23ffffff" opacity="0.8"/><circle cx="1450" cy="380" r="1.5" fill="%23ffffff" opacity="0.9"/><circle cx="1650" cy="450" r="2" fill="%23ffffff" opacity="0.7"/><circle cx="100" cy="600" r="1" fill="%23ffffff" opacity="0.8"/><circle cx="300" cy="650" r="2" fill="%23ffffff" opacity="0.6"/><circle cx="500" cy="580" r="1.5" fill="%23ffffff" opacity="0.9"/><circle cx="700" cy="620" r="1" fill="%23ffffff" opacity="0.7"/><circle cx="900" cy="680" r="2.5" fill="%23ffffff" opacity="0.8"/><circle cx="1100" cy="600" r="1.5" fill="%23ffffff" opacity="0.6"/><circle cx="1300" cy="650" r="1" fill="%23ffffff" opacity="0.9"/><circle cx="1500" cy="580" r="2" fill="%23ffffff" opacity="0.7"/><circle cx="1700" cy="630" r="1.5" fill="%23ffffff" opacity="0.8"/><circle cx="200" cy="800" r="1.5" fill="%23ffffff" opacity="0.6"/><circle cx="400" cy="850" r="1" fill="%23ffffff" opacity="0.8"/><circle cx="600" cy="780" r="2" fill="%23ffffff" opacity="0.9"/><circle cx="800" cy="820" r="1.5" fill="%23ffffff" opacity="0.7"/><circle cx="1000" cy="880" r="1" fill="%23ffffff" opacity="0.6"/><circle cx="1200" cy="800" r="2.5" fill="%23ffffff" opacity="0.8"/><circle cx="1400" cy="850" r="1.5" fill="%23ffffff" opacity="0.9"/><circle cx="1600" cy="780" r="1" fill="%23ffffff" opacity="0.7"/><circle cx="1800" cy="830" r="2" fill="%23ffffff" opacity="0.8"/><ellipse cx="960" cy="300" rx="600" ry="80" fill="%23ffaa44" opacity="0.6" transform="rotate(25 960 300)"/></svg>') center/cover fixed,
+                    linear-gradient(135deg, #001122 0%, #003366 50%, #001133 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.15) 0%, transparent 50%);
+            animation: floating 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -2;
+        }
+        
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 60% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 90% 10%, rgba(118, 75, 162, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 10% 30%, rgba(102, 126, 234, 0.12) 0%, transparent 50%);
+            animation: floating 25s ease-in-out infinite reverse;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        @keyframes floating {
+            0%, 100% {
+                transform: translate(0px, 0px) rotate(0deg);
+            }
+            33% {
+                transform: translate(30px, -30px) rotate(120deg);
+            }
+            66% {
+                transform: translate(-20px, 20px) rotate(240deg);
+            }
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(6px);
+            border-radius: 20px;
+            margin: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .main-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.06), rgba(118, 75, 162, 0.06));
+            border-radius: 20px;
+            z-index: -1;
+        }
+        
+        .header-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .logo-icon {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        h1 {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 0;
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+        
+        .left-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .right-section {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+        
+        .guest-info {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 8px 20px rgba(255, 154, 158, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .action-btn-top {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            text-decoration: none;
+        }
+        
+        .action-btn-top:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .create-btn {
+            background: linear-gradient(45deg, #11998e, #38ef7d);
+        }
+        
+        .create-btn:hover {
+            box-shadow: 0 15px 35px rgba(17, 153, 142, 0.4);
+        }
+        
+        .import-btn {
+            background: linear-gradient(45deg, #2c3e50, #3498db);
+        }
+        
+        .import-btn:hover {
+            box-shadow: 0 15px 35px rgba(52, 152, 219, 0.4);
+        }
+        
+        .nav {
+            background: transparent;
+            border-radius: 60px;
+            padding: 15px 25px;
+            margin-bottom: 30px;
+            display: flex !important;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            list-style: none;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .nav-link {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white !important;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(0);
+            cursor: pointer;
+        }
+        
+        .nav-link:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+            color: white !important;
+            text-decoration: none;
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            backdrop-filter: blur(3px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .projects-section {
+            margin-top: 40px;
+        }
+
+        .projects-section h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            backdrop-filter: blur(3px);
+        }
+        
+        @media (max-width: 768px) {
+            .top-bar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .left-section, .right-section {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .action-buttons {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .main-container {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            .logo-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header-section">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <div>
+                    <h1>COIHUB</h1>
+                    <p class="subtitle">Code • Innovate • Hub</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="top-bar">
+            <!-- Left side - User info -->
+            <div class="left-section">
+                <!-- Django template logic for authentication -->
+                {% if user.is_authenticated %}
+                    <div class="user-info">
+                        <i class="fas fa-user"></i>
+                        Signed in as <strong>{{ user.username }}</strong>
+                    </div>
+                    <div class="action-buttons">
+                        <a href="{% url 'create_project' %}" class="action-btn-top create-btn">
+                            <i class="fas fa-plus"></i> Create Project
+                        </a>
+
+                        <!-- Artıq düymə linkə çevrildi -->
+                        <a href="{% url 'github_login' %}" class="action-btn-top import-btn">
+                            <i class="fab fa-github"></i> Import from GitHub
+                        </a>
+                    </div>
+    
+                {% else %}
+                    <div class="guest-info">
+                        <i class="fas fa-user-slash"></i>
+                        Not signed in
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Right side - Navigation -->
+            <div class="right-section">
+                <ul class="nav">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a href="{% url 'logout' %}" class="nav-link">
+                                <i class="fas fa-sign-out-alt"></i> Log Out
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a href="{% url 'login' %}" class="nav-link">
+                                <i class="fas fa-sign-in-alt"></i> Log In
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'register' %}" class="nav-link">
+                                <i class="fas fa-user-plus"></i> Register
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+        <hr style="border: none;">
+        
+        <!-- Content section for extending templates -->
+        <div class="content-section">
+            {% block body %}
+            <p style="text-align: center; color: #666; font-size: 1.1rem;">Welcome to COIHUB - Your coding innovation hub!</p>
+            {% endblock %}
+        </div>
+
+        <!-- Projects section -->
+        <div class="projects-section">
+            <h2>Projects</h2>
+            <div class="content-section">
+                {% block projects %}
+                    <p style="text-align: center; color: #666;">No projects available.</p>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="{% url 'view_project' project_id=1 %}" class="action-btn-top">
+                            <i class="fas fa-eye"></i> View Project
+                        </a>
+                    </div>
+                {% endblock %}
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2023 COIHUB. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

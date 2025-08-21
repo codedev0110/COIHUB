@@ -1,0 +1,283 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<style>
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 25px;
+        margin-top: 30px;
+    }
+    
+    .project-card {
+        background: bluelinear-gradient(45deg, #f3f4f6, #e5e7eb);
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(102, 126, 234, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .project-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        border-radius: 20px 20px 0 0;
+    }
+    
+    .project-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 50px rgba(102, 126, 234, 0.2);
+        border-color: #667eea;
+    }
+    
+    .project-title {
+        color: #333;
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        margin-top: 5px;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .project-desc {
+        color: #666;
+        margin-bottom: 20px;
+        line-height: 1.6;
+        font-size: 1rem;
+    }
+    
+    .project-author {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 15px;
+        padding: 8px 12px;
+        background: linear-gradient(135deg, #4facfe20, #00f2fe20);
+        border-radius: 20px;
+        border-left: 3px solid #4facfe;
+    }
+    
+    .project-author i {
+        color: #4facfe;
+        font-size: 1rem;
+    }
+    
+    .project-author-text {
+        color: #333;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+    
+    .project-languages {
+        margin-bottom: 20px;
+    }
+    
+    .languages-label {
+        color: #555;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+    }
+    
+    .languages-label i {
+        color: #667eea;
+    }
+    
+    .languages-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .language-tag {
+        background: linear-gradient(45deg, #667eea15, #764ba215);
+        color: #667eea;
+        padding: 6px 14px;
+        border-radius: 18px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        border: 1px solid #667eea30;
+        transition: all 0.3s ease;
+    }
+    
+    .language-tag:hover {
+        background: linear-gradient(45deg, #667eea25, #764ba225);
+        transform: translateY(-1px);
+    }
+    
+    .project-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+    }
+    
+    .action-btn {
+        flex: 1;
+        padding: 12px 16px;
+        border-radius: 15px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 0.9rem;
+    }
+    
+    .btn-primary-custom {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+    }
+    
+    .btn-outline-custom {
+        background: transparent;
+        border: 2px solid #667eea;
+        color: #667eea;
+    }
+    
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        text-decoration: none;
+        color: white;
+    }
+    
+    .btn-outline-custom:hover {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+    }
+    
+    .no-projects {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+        font-size: 1.2rem;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 20px;
+        backdrop-filter: blur(5px);
+    }
+    
+    .no-projects i {
+        font-size: 3rem;
+        color: #667eea;
+        margin-bottom: 20px;
+        opacity: 0.6;
+    }
+    
+    .projects-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .projects-header h2 {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .projects-count {
+        color: #666;
+        font-style: italic;
+        font-size: 1.1rem;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .projects-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .project-card {
+            padding: 20px;
+        }
+        
+        .project-title {
+            font-size: 1.2rem;
+        }
+        
+        .action-btn {
+            padding: 10px 12px;
+            font-size: 0.85rem;
+        }
+    }
+</style>
+
+<div class="projects-header">
+    <h2><i class="fas fa-folder-open"></i> All Projects</h2>
+    {% if projects %}
+        <p class="projects-count">{{ projects|length }} project{{ projects|length|pluralize }} found</p>
+    {% endif %}
+</div>
+
+{% if projects %}
+    <div class="projects-grid">
+        {% for project in projects %}
+            <div class="project-card">
+                <h2 class="project-title">
+                    <i class="fas fa-code-branch"></i>
+                    {{ project.title }}
+                </h2>
+                
+                <p class="project-desc">{{ project.description|truncatewords:20 }}</p>
+                
+                <div class="project-author">
+                    <i class="fas fa-user"></i>
+                    <span class="project-author-text">{{ project.author.username }}</span>
+                </div>
+                
+                <div class="project-languages">
+                    <div class="languages-label">
+                        <i class="fas fa-tags"></i>
+                        Languages:
+                    </div>
+                    <div class="languages-tags">
+                        {% for language in project.languages.all %}
+                            <span class="language-tag">{{ language.name }}</span>
+                        {% empty %}
+                            <span class="language-tag" style="color: #999;">No languages specified</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="project-actions">
+                    <a href="{% url 'view_project' project_id=project.id %}" class="action-btn btn-primary-custom">
+                        <i class="fas fa-eye"></i> View
+                    </a>
+                    <a href="#" class="action-btn btn-outline-custom">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="no-projects">
+        <i class="fas fa-folder-open"></i>
+        <h3>No projects found</h3>
+        <p>Start creating your first project to see it here!</p>
+    </div>
+{% endif %}
+
+{% endblock %}

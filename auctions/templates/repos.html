@@ -1,0 +1,12 @@
+<h1>Sənin GitHub Reposların</h1>
+
+<ul>
+    {% for repo in repos %}
+        <li>
+            <a href="{{ repo.html_url }}" target="_blank">{{ repo.name }}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% if not repos %}
+    <p>Heç bir repo tapılmadı. GitHub hesabını yoxla və ya yeni repo əlavə et.</p>
+{% endif %}
