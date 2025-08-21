@@ -25,7 +25,8 @@ SECRET_KEY = '6ps8j!crjgrxt34cqbqn7x&b3y%(fny8k8nh21+qa)%ws3fh!q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['coihub-1.onrender.com', '127.0.0.1', 'localhost']
+
 # Dosyanın en sonuna ekleyin
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -125,7 +126,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 GITHUB_CLIENT_ID = "Ov23li4EKDoc4UxuIKC1"
 GITHUB_CLIENT_SECRET = "a3f52145fc36b3a30d001d2b97704be9bccd6db3"
-ALLOWED_HOSTS = ['coihub-1.onrender.com', '127.0.0.1', 'localhost']
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
