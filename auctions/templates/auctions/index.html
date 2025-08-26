@@ -1,741 +1,660 @@
-<!DOCTYPE html>
-<html lang="az">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bütün Proyektlər</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{% extends "auctions/layout.html" %}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #000000;
-            color: #ffffff;
-            line-height: 1.6;
-            padding: 20px;
-        }
+{% block body %}
+<style>
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 25px;
+        margin-top: 30px;
+    }
+    
+    .project-card {
+        background: linear-gradient(135deg, rgba(30, 58, 138, 0.2) 0%, rgba(29, 78, 216, 0.25) 50%, rgba(37, 99, 235, 0.2) 100%);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 
+            0 10px 40px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(147, 197, 253, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .project-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(45deg, #3b82f6, #6366f1, #8b5cf6);
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+    }
+    
+    .project-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 
+            0 20px 60px rgba(59, 130, 246, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        border-color: rgba(147, 197, 253, 0.4);
+    }
+    
+    .project-title {
+        color: rgba(248, 250, 252, 0.95);
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        margin-top: 5px;
+        background: linear-gradient(45deg, #c606ec, #6366f1, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+    }
+    
+    .project-desc {
+        color: rgba(203, 213, 225, 0.9);
+        margin-bottom: 20px;
+        line-height: 1.6;
+        font-size: 1rem;
+    }
+    
+    .project-author {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 15px;
+        padding: 8px 12px;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(96, 165, 250, 0.15) 100%);
+        border-radius: 20px;
+        border-left: 3px solid #3b82f6;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    .project-author i {
+        color: #60a5fa;
+        font-size: 1rem;
+    }
+    
+    .project-author-text {
+        color: rgba(248, 250, 252, 0.9);
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+    
+    .project-languages {
+        margin-bottom: 20px;
+    }
+    
+    .languages-label {
+        color: rgba(226, 232, 240, 0.9);
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+    }
+    
+    .languages-label i {
+        color: #6366f1;
+    }
+    
+    .languages-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .language-tag {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(99, 102, 241, 0.15) 100%);
+        color: #93c5fd;
+        padding: 6px 14px;
+        border-radius: 18px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        transition: all 0.3s ease;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    .language-tag:hover {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(99, 102, 241, 0.25) 100%);
+        transform: translateY(-1px);
+        box-shadow: 
+            0 5px 15px rgba(59, 130, 246, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    
+    .project-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(147, 197, 253, 0.2);
+    }
+    
+    .action-btn {
+        flex: 1;
+        padding: 12px 16px;
+        border-radius: 15px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .action-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+    
+    .action-btn:hover::before {
+        left: 100%;
+    }
+    
+    .btn-primary-custom {
+        background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #6366f1 100%);
+        color: white;
+        box-shadow: 
+            0 5px 20px rgba(59, 130, 246, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn-outline-custom {
+        background: rgba(59, 130, 246, 0.1);
+        border: 2px solid rgba(59, 130, 246, 0.5);
+        color: #93c5fd;
+        backdrop-filter: blur(5px);
+    }
+    
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 
+            0 8px 30px rgba(59, 130, 246, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        text-decoration: none;
+        color: white;
+    }
+    
+    .btn-outline-custom:hover {
+        background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #6366f1 100%);
+        color: white;
+        border-color: #3b82f6;
+    }
+    
+    .no-projects {
+        text-align: center;
+        padding: 60px 20px;
+        color: rgba(203, 213, 225, 0.8);
+        font-size: 1.2rem;
+        background: linear-gradient(135df, rgba(30, 58, 138, 0.15) 0%, rgba(29, 78, 216, 0.2) 50%, rgba(37, 99, 235, 0.15) 100%);
+        border-radius: 20px;
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(147, 197, 253, 0.2);
+        box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    .no-projects i {
+        font-size: 3rem;
+        color: #6366f1;
+        margin-bottom: 20px;
+        opacity: 0.8;
+        filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
+    }
+    
+    .no-projects h3 {
+        color: rgba(248, 250, 252, 0.9);
+        margin-bottom: 15px;
+    }
+    
+    .projects-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .projects-header h2 {
+        background: linear-gradient(45deg, #3b82f6, #6366f1, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+    
+    .projects-count {
+        color: rgba(147, 197, 253, 0.8);
+        font-style: italic;
+        font-size: 1.1rem;
+    }
 
+    /* Filter section styles */
+    .filter-section {
+        background: linear-gradient(135deg, rgba(30, 58, 138, 0.2) 0%, rgba(29, 78, 216, 0.25) 50%, rgba(37, 99, 235, 0.2) 100%);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 30px;
+        border: 1px solid rgba(147, 197, 253, 0.2);
+        box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .filter-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        color: rgba(248, 250, 252, 0.95);
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .filter-header i {
+        color: #6366f1;
+        font-size: 1.2rem;
+        filter: drop-shadow(0 0 5px rgba(99, 102, 241, 0.5));
+    }
+
+    .language-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .filter-btn {
+        padding: 10px 18px;
+        border-radius: 25px;
+        border: 2px solid rgba(59, 130, 246, 0.4);
+        background: rgba(59, 130, 246, 0.1);
+        color: #93c5fd;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        backdrop-filter: blur(5px);
+        position: relative;
+        overflow: hidden;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .filter-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.5s;
+    }
+
+    .filter-btn:hover::before {
+        left: 100%;
+    }
+
+    .filter-btn:hover {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(99, 102, 241, 0.15) 100%);
+        transform: translateY(-2px);
+        border-color: #3b82f6;
+        box-shadow: 
+            0 5px 20px rgba(59, 130, 246, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .filter-btn.active {
+        background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #6366f1 100%);
+        color: white;
+        border-color: #3b82f6;
+        box-shadow: 
+            0 5px 20px rgba(59, 130, 246, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .filter-btn.all-filter {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+        border-color: rgba(16, 185, 129, 0.4);
+        color: #6ee7b7;
+    }
+
+    .filter-btn.all-filter:hover {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 182, 212, 0.15) 100%);
+        border-color: #10b981;
+    }
+
+    .filter-btn.all-filter.active {
+        background: linear-gradient(135deg, #065f46 0%, #059669 50%, #10b981 100%);
+        color: white;
+        border-color: #10b981;
+        box-shadow: 
+            0 5px 20px rgba(16, 185, 129, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .clear-filters {
+        background: linear-gradient(135df, rgba(239, 68, 68, 0.1) 0%, rgba(248, 113, 113, 0.1) 100%);
+        color: #fca5a5;
+        border-color: rgba(239, 68, 68, 0.4);
+    }
+
+    .clear-filters:hover {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #f87171 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 
+            0 5px 20px rgba(239, 68, 68, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    /* Hide/show animation for filtered projects */
+    .project-card.hidden {
+        display: none;
+    }
+
+    .project-card.fade-in {
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from { 
+            opacity: 0; 
+            transform: translateY(20px) scale(0.95); 
+        }
+        to { 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
+        }
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
         .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
         
         .project-card {
-            background: #111111;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            border: 1px solid #333333;
-            position: relative;
-        }
-        
-        .project-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
-            border-color: #555555;
+            padding: 20px;
         }
         
         .project-title {
-            color: #ffffff;
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            margin-top: 5px;
-        }
-        
-        .project-desc {
-            color: #cccccc;
-            margin-bottom: 20px;
-            line-height: 1.6;
-            font-size: 1rem;
-        }
-        
-        .project-author {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 15px;
-            padding: 8px 12px;
-            background: #222222;
-            border-radius: 8px;
-            border-left: 3px solid #ffffff;
-        }
-        
-        .project-author i {
-            color: #ffffff;
-            font-size: 1rem;
-        }
-        
-        .project-author-text {
-            color: #ffffff;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-        
-        .project-languages {
-            margin-bottom: 20px;
-        }
-        
-        .languages-label {
-            color: #ffffff;
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-        }
-        
-        .languages-label i {
-            color: #cccccc;
-        }
-        
-        .languages-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        
-        .language-tag {
-            background: #333333;
-            color: #ffffff;
-            padding: 6px 14px;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            border: 1px solid #555555;
-            transition: all 0.3s ease;
-        }
-        
-        .language-tag:hover {
-            background: #444444;
-            transform: translateY(-1px);
-        }
-        
-        .project-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid #333333;
+            font-size: 1.2rem;
         }
         
         .action-btn {
-            flex: 1;
-            padding: 12px 16px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 0.9rem;
-        }
-        
-        .btn-primary-custom {
-            background: #333333;
-            color: #ffffff;
-            border: 2px solid #555555;
-        }
-        
-        .btn-outline-custom {
-            background: transparent;
-            border: 2px solid #666666;
-            color: #cccccc;
-        }
-        
-        .action-btn:hover {
-            transform: translateY(-2px);
-            text-decoration: none;
-        }
-
-        .btn-primary-custom:hover {
-            background: #555555;
-            color: #ffffff;
-            border-color: #777777;
-        }
-        
-        .btn-outline-custom:hover {
-            background: #444444;
-            color: #ffffff;
-            border-color: #888888;
-        }
-        
-        .no-projects {
-            text-align: center;
-            padding: 60px 20px;
-            color: #cccccc;
-            font-size: 1.2rem;
-            background: #111111;
-            border-radius: 10px;
-            border: 1px solid #333333;
-        }
-        
-        .no-projects i {
-            font-size: 3rem;
-            color: #666666;
-            margin-bottom: 20px;
-        }
-        
-        .no-projects h3 {
-            color: #ffffff;
-            margin-bottom: 15px;
-        }
-        
-        .projects-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .projects-header h2 {
-            color: #ffffff;
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .projects-count {
-            color: #cccccc;
-            font-style: italic;
-            font-size: 1.1rem;
-        }
-
-        /* Filter section styles */
-        .filter-section {
-            background: #111111;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 30px;
-            border: 1px solid #333333;
-        }
-
-        .filter-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .filter-header i {
-            color: #cccccc;
-            font-size: 1.2rem;
+            padding: 10px 12px;
+            font-size: 0.85rem;
         }
 
         .language-filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
+            justify-content: center;
         }
 
         .filter-btn {
-            padding: 10px 18px;
-            border-radius: 20px;
-            border: 2px solid #555555;
-            background: #222222;
-            color: #ffffff;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            padding: 8px 15px;
+            font-size: 0.85rem;
         }
 
-        .filter-btn:hover {
-            background: #333333;
-            transform: translateY(-2px);
-            border-color: #666666;
+        .filter-section {
+            padding: 20px;
         }
+    }
+</style>
 
-        .filter-btn.active {
-            background: #ffffff;
-            color: #000000;
-            border-color: #ffffff;
-        }
-
-        .filter-btn.all-filter {
-            background: #222222;
-            border-color: #666666;
-            color: #ffffff;
-        }
-
-        .filter-btn.all-filter:hover {
-            background: #333333;
-            border-color: #777777;
-        }
-
-        .filter-btn.all-filter.active {
-            background: #cccccc;
-            color: #000000;
-            border-color: #cccccc;
-        }
-
-        .clear-filters {
-            background: #222222;
-            color: #cccccc;
-            border-color: #555555;
-        }
-
-        .clear-filters:hover {
-            background: #333333;
-            color: #ffffff;
-            transform: translateY(-2px);
-            border-color: #666666;
-        }
-
-        /* Hide/show animation for filtered projects */
-        .project-card.hidden {
-            display: none;
-        }
-
-        .project-card.fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { 
-                opacity: 0; 
-                transform: translateY(20px) scale(0.95); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0) scale(1); 
-            }
-        }
-        
-        /* Responsive design */
-        @media (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-
-            .projects-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .project-card {
-                padding: 20px;
-            }
-            
-            .project-title {
-                font-size: 1.2rem;
-            }
-            
-            .action-btn {
-                padding: 10px 12px;
-                font-size: 0.85rem;
-            }
-
-            .language-filters {
-                justify-content: center;
-            }
-
-            .filter-btn {
-                padding: 8px 15px;
-                font-size: 0.85rem;
-            }
-
-            .filter-section {
-                padding: 20px;
-            }
-
-            .projects-header h2 {
-                font-size: 2rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="projects-header">
-        <h2><i class="fas fa-folder-open"></i> Bütün Proyektlər</h2>
+<div class="projects-header">
+    <h2><i class="fas fa-folder-open"></i> Bütün Proyektlər</h2>
+    {% if projects %}
         <p class="projects-count">
-            <span id="total-count">6</span> proyekt tapıldı
+            <span id="total-count">{{ projects|length }}</span> proyekt tapıldı
         </p>
-    </div>
+    {% endif %}
+</div>
 
-    <!-- Language Filter Section -->
-    <div class="filter-section">
-        <div class="filter-header">
-            <i class="fas fa-filter"></i>
-            Dil üzrə filterlə
-        </div>
-        <div class="language-filters">
-            <button class="filter-btn all-filter active" data-language="all">
-                <i class="fas fa-globe"></i>
-                Hamısı
-            </button>
-            
-            <button class="filter-btn" data-language="Python">
-                <i class="fab fa-python"></i>
-                Python
-            </button>
-            <button class="filter-btn" data-language="JavaScript">
-                <i class="fab fa-js"></i>
-                JavaScript
-            </button>
-            <button class="filter-btn" data-language="Java">
-                <i class="fab fa-java"></i>
-                Java
-            </button>
-            <button class="filter-btn" data-language="C++">
-                <i class="fas fa-code"></i>
-                C++
-            </button>
-            <button class="filter-btn" data-language="HTML">
-                <i class="fab fa-html5"></i>
-                HTML
-            </button>
-            <button class="filter-btn" data-language="CSS">
-                <i class="fab fa-css3"></i>
-                CSS
-            </button>
-            <button class="filter-btn" data-language="React">
-                <i class="fab fa-react"></i>
-                React
-            </button>
-            
-            <button class="filter-btn clear-filters" id="clear-filters" style="display: none;">
-                <i class="fas fa-times"></i>
-                Təmizlə
-            </button>
-        </div>
+<!-- Language Filter Section -->
+{% if projects %}
+<div class="filter-section">
+    <div class="filter-header">
+        <i class="fas fa-filter"></i>
+        Dil üzrə filterlə
     </div>
+    <div class="language-filters">
+        <button class="filter-btn all-filter active" data-language="all">
+            <i class="fas fa-globe"></i>
+            Hamısı
+        </button>
+        
+        {% comment %} 
+        <!-- Backend-də bu şəkildə unique language-ləri göndərmək lazımdır -->
+        {% for language in unique_languages %}
+        <button class="filter-btn" data-language="{{ language.name }}">
+            <i class="fas fa-code"></i>
+            {{ language.name }}
+        </button>
+        {% endfor %}
+        {% endcomment %}
+        
+        <!-- Demo üçün statik dillər -->
+        <button class="filter-btn" data-language="Python">
+            <i class="fab fa-python"></i>
+            Python
+        </button>
+        <button class="filter-btn" data-language="JavaScript">
+            <i class="fab fa-js"></i>
+            JavaScript
+        </button>
+        <button class="filter-btn" data-language="Java">
+            <i class="fab fa-java"></i>
+            Java
+        </button>
+        <button class="filter-btn" data-language="C++">
+            <i class="fas fa-code"></i>
+            C++
+        </button>
+        <button class="filter-btn" data-language="HTML">
+            <i class="fab fa-html5"></i>
+            HTML
+        </button>
+        <button class="filter-btn" data-language="CSS">
+            <i class="fab fa-css3"></i>
+            CSS
+        </button>
+        <button class="filter-btn" data-language="React">
+            <i class="fab fa-react"></i>
+            React
+        </button>
+        
+        <button class="filter-btn clear-filters" id="clear-filters" style="display: none;">
+            <i class="fas fa-times"></i>
+            Təmizlə
+        </button>
+    </div>
+</div>
+{% endif %}
 
+{% if projects %}
     <div class="projects-grid" id="projects-grid">
-        <!-- Sample Project Cards -->
-        <div class="project-card" data-languages="Python,Django">
-            <h2 class="project-title">
-                <i class="fas fa-code-branch"></i>
-                E-Commerce Platforması
-            </h2>
-            
-            <p class="project-desc">Django və Python ilə hazırlanmış tam funksional e-commerce platforması. Məhsul kataloqu, səbət sistemi və ödəniş inteqrasiyası daxildir.</p>
-            
-            <div class="project-author">
-                <i class="fas fa-user"></i>
-                <span class="project-author-text">admin</span>
-            </div>
-            
-            <div class="project-languages">
-                <div class="languages-label">
-                    <i class="fas fa-tags"></i>
-                    Dillər:
+        {% for project in projects %}
+            <div class="project-card" 
+                 data-languages="{% for language in project.languages.all %}{{ language.name }}{% if not forloop.last %},{% endif %}{% endfor %}">
+                <h2 class="project-title">
+                    <i class="fas fa-code-branch"></i>
+                    {{ project.title }}
+                </h2>
+                
+                <p class="project-desc">{{ project.description|truncatewords:20 }}</p>
+                
+                <div class="project-author">
+                    <i class="fas fa-user"></i>
+                    <span class="project-author-text">{{ project.author.username }}</span>
                 </div>
-                <div class="languages-tags">
-                    <span class="language-tag">Python</span>
-                    <span class="language-tag">Django</span>
+                
+                <div class="project-languages">
+                    <div class="languages-label">
+                        <i class="fas fa-tags"></i>
+                        Dillər:
+                    </div>
+                    <div class="languages-tags">
+                        {% for language in project.languages.all %}
+                            <span class="language-tag">{{ language.name }}</span>
+                        {% empty %}
+                            <span class="language-tag" style="color: rgba(156, 163, 175, 0.8);">Dil göstərilməyib</span>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
-            
-            <div class="project-actions">
-                <a href="#" class="action-btn btn-primary-custom">
-                    <i class="fas fa-eye"></i> Bax
-                </a>
-                <a href="#" class="action-btn btn-outline-custom">
-                    <i class="fas fa-edit"></i> Redaktə et
-                </a>
-            </div>
-        </div>
-
-        <div class="project-card" data-languages="JavaScript,React,CSS">
-            <h2 class="project-title">
-                <i class="fas fa-code-branch"></i>
-                Task Manager App
-            </h2>
-            
-            <p class="project-desc">React və JavaScript ilə hazırlanmış müasir tapşırıq idarəetmə tətbiqi. Drag & drop, filter və real-time yenilənmə xüsusiyyətləri var.</p>
-            
-            <div class="project-author">
-                <i class="fas fa-user"></i>
-                <span class="project-author-text">developer1</span>
-            </div>
-            
-            <div class="project-languages">
-                <div class="languages-label">
-                    <i class="fas fa-tags"></i>
-                    Dillər:
-                </div>
-                <div class="languages-tags">
-                    <span class="language-tag">JavaScript</span>
-                    <span class="language-tag">React</span>
-                    <span class="language-tag">CSS</span>
+                
+                <div class="project-actions">
+                    <a href="{% url 'view_project' project_id=project.id %}" class="action-btn btn-primary-custom">
+                        <i class="fas fa-eye"></i> Bax
+                    </a>
+                    <a href="#" class="action-btn btn-outline-custom">
+                        <i class="fas fa-edit"></i> Redaktə et
+                    </a>
                 </div>
             </div>
-            
-            <div class="project-actions">
-                <a href="#" class="action-btn btn-primary-custom">
-                    <i class="fas fa-eye"></i> Bax
-                </a>
-                <a href="#" class="action-btn btn-outline-custom">
-                    <i class="fas fa-edit"></i> Redaktə et
-                </a>
-            </div>
-        </div>
-
-        <div class="project-card" data-languages="Java,Spring">
-            <h2 class="project-title">
-                <i class="fas fa-code-branch"></i>
-                Banking System API
-            </h2>
-            
-            <p class="project-desc">Java və Spring Boot ilə hazırlanmış bank sistemi REST API. Hesab idarəetməsi, köçürmə və balans əməliyyatları dəstəklənir.</p>
-            
-            <div class="project-author">
-                <i class="fas fa-user"></i>
-                <span class="project-author-text">backend_dev</span>
-            </div>
-            
-            <div class="project-languages">
-                <div class="languages-label">
-                    <i class="fas fa-tags"></i>
-                    Dillər:
-                </div>
-                <div class="languages-tags">
-                    <span class="language-tag">Java</span>
-                    <span class="language-tag">Spring</span>
-                </div>
-            </div>
-            
-            <div class="project-actions">
-                <a href="#" class="action-btn btn-primary-custom">
-                    <i class="fas fa-eye"></i> Bax
-                </a>
-                <a href="#" class="action-btn btn-outline-custom">
-                    <i class="fas fa-edit"></i> Redaktə et
-                </a>
-            </div>
-        </div>
-
-        <div class="project-card" data-languages="HTML,CSS,JavaScript">
-            <h2 class="project-title">
-                <i class="fas fa-code-branch"></i>
-                Portfolio Website
-            </h2>
-            
-            <p class="project-desc">HTML, CSS və JavaScript ilə hazırlanmış responsiv şəxsi portfolio saytı. Animasiyalar və müasir dizayn elementləri ilə.</p>
-            
-            <div class="project-author">
-                <i class="fas fa-user"></i>
-                <span class="project-author-text">designer_coder</span>
-            </div>
-            
-            <div class="project-languages">
-                <div class="languages-label">
-                    <i class="fas fa-tags"></i>
-                    Dillər:
-                </div>
-                <div class="languages-tags">
-                    <span class="language-tag">HTML</span>
-                    <span class="language-tag">CSS</span>
-                    <span class="language-tag">JavaScript</span>
-                </div>
-            </div>
-            
-            <div class="project-actions">
-                <a href="#" class="action-btn btn-primary-custom">
-                    <i class="fas fa-eye"></i> Bax
-                </a>
-                <a href="#" class="action-btn btn-outline-custom">
-                    <i class="fas fa-edit"></i> Redaktə et
-                </a>
-            </div>
-        </div>
-
-        <div class="project-card" data-languages="C++">
-            <h2 class="project-title">
-                <i class="fas fa-code-branch"></i>
-                Game Engine
-            </h2>
-            
-            <p class="project-desc">C++ dilində hazırlanmış sadə 2D oyun mühərriki. OpenGL istifadə edərək render sistemi və fizika simulyasiyası daxildir.</p>
-            
-            <div class="project-author">
-                <i class="fas fa-user"></i>
-                <span class="project-author-text">cpp_master</span>
-            </div>
-            
-            <div class="project-languages">
-                <div class="languages-label">
-                    <i class="fas fa-tags"></i>
-                    Dillər:
-                </div>
-                <div class="languages-tags">
-                    <span class="language-tag">C++</span>
-                </div>
-            </div>
-            
-            <div class="project-actions">
-                <a href="#" class="action-btn btn-primary-custom">
-                    <i class="fas fa-eye"></i> Bax
-                </a>
-                <a href="#" class="action-btn btn-outline-custom">
-                    <i class="fas fa-edit"></i> Redaktə et
-                </a>
-            </div>
-        </div>
-
-        <div class="project-card" data-languages="Python,Machine Learning">
-            <h2 class="project-title">
-                <i class="fas fa-code-branch"></i>
-                Data Analysis Tool
-            </h2>
-            
-            <p class="project-desc">Python və pandas/matplotlib kitabxanalarından istifadə edərək hazırlanmış məlumat analizi aləti. CSV fayllarını işləyir və vizuallaşdırır.</p>
-            
-            <div class="project-author">
-                <i class="fas fa-user"></i>
-                <span class="project-author-text">data_scientist</span>
-            </div>
-            
-            <div class="project-languages">
-                <div class="languages-label">
-                    <i class="fas fa-tags"></i>
-                    Dillər:
-                </div>
-                <div class="languages-tags">
-                    <span class="language-tag">Python</span>
-                    <span class="language-tag">Machine Learning</span>
-                </div>
-            </div>
-            
-            <div class="project-actions">
-                <a href="#" class="action-btn btn-primary-custom">
-                    <i class="fas fa-eye"></i> Bax
-                </a>
-                <a href="#" class="action-btn btn-outline-custom">
-                    <i class="fas fa-edit"></i> Redaktə et
-                </a>
-            </div>
-        </div>
+        {% endfor %}
     </div>
+{% else %}
+    <div class="no-projects">
+        <i class="fas fa-folder-open"></i>
+        <h3>Heç bir proyekt tapılmadı</h3>
+        <p>İlk proyektinizi yaradın ki, burada görünsün!</p>
+    </div>
+{% endif %}
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const projectCards = document.querySelectorAll('.project-card');
-        const totalCountElement = document.getElementById('total-count');
-        const clearFiltersBtn = document.getElementById('clear-filters');
-        let activeFilters = [];
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+    const totalCountElement = document.getElementById('total-count');
+    const clearFiltersBtn = document.getElementById('clear-filters');
+    let activeFilters = [];
 
-        filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const language = this.getAttribute('data-language');
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const language = this.getAttribute('data-language');
+            
+            // "Hamısı" düyməsi seçildikdə
+            if (language === 'all') {
+                // Bütün filterləri təmizlə
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                activeFilters = [];
+                clearFiltersBtn.style.display = 'none';
                 
-                // "Hamısı" düyməsi seçildikdə
-                if (language === 'all') {
-                    // Bütün filterləri təmizlə
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    activeFilters = [];
-                    clearFiltersBtn.style.display = 'none';
-                    
-                    // Bütün proyektləri göstər
-                    projectCards.forEach(card => {
-                        card.classList.remove('hidden');
-                        card.classList.add('fade-in');
-                    });
-                    
-                    updateProjectCount();
-                    return;
-                }
-
-                // "Təmizlə" düyməsi seçildikdə
-                if (this.id === 'clear-filters') {
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    document.querySelector('[data-language="all"]').classList.add('active');
-                    activeFilters = [];
-                    this.style.display = 'none';
-                    
-                    projectCards.forEach(card => {
-                        card.classList.remove('hidden');
-                        card.classList.add('fade-in');
-                    });
-                    
-                    updateProjectCount();
-                    return;
-                }
-
-                // Normal dil filteri
-                document.querySelector('[data-language="all"]').classList.remove('active');
-                
-                if (this.classList.contains('active')) {
-                    // Filter aktiv idi, deaktiv et
-                    this.classList.remove('active');
-                    activeFilters = activeFilters.filter(lang => lang !== language);
-                } else {
-                    // Filter deaktiv idi, aktiv et
-                    this.classList.add('active');
-                    if (!activeFilters.includes(language)) {
-                        activeFilters.push(language);
-                    }
-                }
-
-                // Əgər heç bir filter seçilməyibsə, "Hamısı"nı aktiv et
-                if (activeFilters.length === 0) {
-                    document.querySelector('[data-language="all"]').classList.add('active');
-                    clearFiltersBtn.style.display = 'none';
-                } else {
-                    clearFiltersBtn.style.display = 'flex';
-                }
-
-                // Proyektləri filterlə
-                filterProjects();
-                updateProjectCount();
-            });
-        });
-
-        function filterProjects() {
-            if (activeFilters.length === 0) {
-                // Heç bir filter yoxdursa, hamısını göstər
+                // Bütün proyektləri göstər
                 projectCards.forEach(card => {
                     card.classList.remove('hidden');
                     card.classList.add('fade-in');
                 });
+                
+                updateProjectCount();
                 return;
             }
 
-            projectCards.forEach(card => {
-                const cardLanguages = card.getAttribute('data-languages').split(',').map(lang => lang.trim());
+            // "Təmizlə" düyməsi seçildikdə
+            if (this.id === 'clear-filters') {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                document.querySelector('[data-language="all"]').classList.add('active');
+                activeFilters = [];
+                this.style.display = 'none';
                 
-                // Seçilmiş filterlərdən ən azı biri proyektdə varsa göstər
-                const hasMatchingLanguage = activeFilters.some(filter => 
-                    cardLanguages.some(cardLang => cardLang.toLowerCase().includes(filter.toLowerCase()))
-                );
-
-                if (hasMatchingLanguage) {
+                projectCards.forEach(card => {
                     card.classList.remove('hidden');
                     card.classList.add('fade-in');
-                } else {
-                    card.classList.add('hidden');
-                    card.classList.remove('fade-in');
+                });
+                
+                updateProjectCount();
+                return;
+            }
+
+            // Normal dil filteri
+            document.querySelector('[data-language="all"]').classList.remove('active');
+            
+            if (this.classList.contains('active')) {
+                // Filter aktiv idi, deaktiv et
+                this.classList.remove('active');
+                activeFilters = activeFilters.filter(lang => lang !== language);
+            } else {
+                // Filter deaktiv idi, aktiv et
+                this.classList.add('active');
+                if (!activeFilters.includes(language)) {
+                    activeFilters.push(language);
                 }
+            }
+
+            // Əgər heç bir filter seçilməyibsə, "Hamısı"nı aktiv et
+            if (activeFilters.length === 0) {
+                document.querySelector('[data-language="all"]').classList.add('active');
+                clearFiltersBtn.style.display = 'none';
+            } else {
+                clearFiltersBtn.style.display = 'flex';
+            }
+
+            // Proyektləri filterlə
+            filterProjects();
+            updateProjectCount();
+        });
+    });
+
+    function filterProjects() {
+        if (activeFilters.length === 0) {
+            // Heç bir filter yoxdursa, hamısını göstər
+            projectCards.forEach(card => {
+                card.classList.remove('hidden');
+                card.classList.add('fade-in');
             });
+            return;
         }
 
-        function updateProjectCount() {
-            const visibleProjects = document.querySelectorAll('.project-card:not(.hidden)').length;
-            totalCountElement.textContent = visibleProjects;
-        }
-    });
-    </script>
-</body>
-</html>
+        projectCards.forEach(card => {
+            const cardLanguages = card.getAttribute('data-languages').split(',').map(lang => lang.trim());
+            
+            // Seçilmiş filterlərdən ən azı biri proyektdə varsa göstər
+            const hasMatchingLanguage = activeFilters.some(filter => 
+                cardLanguages.some(cardLang => cardLang.toLowerCase().includes(filter.toLowerCase()))
+            );
+
+            if (hasMatchingLanguage) {
+                card.classList.remove('hidden');
+                card.classList.add('fade-in');
+            } else {
+                card.classList.add('hidden');
+                card.classList.remove('fade-in');
+            }
+        });
+    }
+
+    function updateProjectCount() {
+        const visibleProjects = document.querySelectorAll('.project-card:not(.hidden)').length;
+        totalCountElement.textContent = visibleProjects;
+    }
+});
+</script>
+
+{% endblock %}
